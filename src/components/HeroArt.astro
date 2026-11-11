@@ -1,0 +1,95 @@
+---
+// Nine stacked planes, one per parallel worktree used to build SnapPrompt.
+// The SVG is the default and the only version on phones. On wide screens without
+// reduced motion, three.js is fetched after the page is idle and replaces it.
+const planes = Array.from({ length: 9 }, (_, i) => i);
+---
+
+<figure class="hero-art">
+  <svg class="hero-svg" viewBox="0 0 420 360" role="img" aria-hidden="true">
+    {
+      planes.map((i) => {
+        const y = 40 + i * 30;
+        const active = i === 4;
+        return (
+          <polygon
+            points={`70,${y + 40} 230,${y} 370,${y + 40} 210,${y + 80}`}
+            fill={active ? "#1d4ed8" : "#ffffff"}
+            fill-opacity={active ? 0.92 : 0.86}
+            stroke={active ? "#1d4ed8" : "#101318"}
+            stroke-width="1.2"
+          />
+        );
+      })
+    }
+  </svg>
+  <div class="hero-canvas" data-hero-canvas></div>
+  <figcaption class="mono">9 parallel worktrees · one release</figcaption>
+</figure>
+
+<script>
+  const host = document.querySelector<HTMLElement>("[data-hero-canvas]");
+  const wide = window.matchMedia("(min-width: 900px)").matches;
+  const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (host && wide && !still) {
+    const start = () =>
+      import("../scripts/hero-scene").then(({ mountHeroScene }) => {
+        if (mountHeroScene(host)) host.closest(".hero-art")?.classList.add("is-3d");
+      });
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(start, { timeout: 2500 });
+    } else {
+      setTimeout(start, 1200);
+    }
+  }
+</script>
+
+<style>
+  .hero-art {
+    position: relative;
+    margin: 0;
+    aspect-ratio: 7 / 6;
+    width: 100%;
+    max-width: 460px;
+    justify-self: end;
+  }
+
+  .hero-svg,
+  .hero-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-canvas {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .hero-art.is-3d .hero-canvas {
+    opacity: 1;
+  }
+
+  .hero-art.is-3d .hero-svg {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  figcaption {
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 859px) {
+    .hero-art {
+      max-width: 300px;
+      justify-self: start;
+    }
+  }
+</style>

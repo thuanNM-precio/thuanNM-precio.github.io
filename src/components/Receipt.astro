@@ -1,0 +1,172 @@
+---
+import type { CaseStudy } from "../data/site";
+
+interface Props {
+  item: CaseStudy;
+  href?: string;
+  headingLevel?: "h2" | "h3";
+  showOutcome?: boolean;
+}
+
+const { item, href, headingLevel = "h3", showOutcome = true } = Astro.props;
+const Heading = headingLevel;
+---
+
+<article class="receipt" aria-labelledby={`r-${item.slug}`}>
+  <div class="paper">
+    <header class="r-head">
+      <span class="mono r-no">No. {item.no}</span>
+      <span class="mono r-kicker">{item.kicker}</span>
+    </header>
+    <Heading id={`r-${item.slug}`} class="r-title">{item.name}</Heading>
+    {showOutcome && <p class="r-outcome">{item.outcome}</p>}
+    <dl class="r-lines">
+      {
+        item.receipt.map((line) => (
+          <div class="r-line">
+            <dt>{line.label}</dt>
+            <dd>{line.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+    <div class="r-total">
+      <span>{item.total.label}</span>
+      <strong>{item.total.value}</strong>
+    </div>
+    {item.footnote && <p class="r-foot mono">{item.footnote}</p>}
+    {
+      href && (
+        <a class="r-link" href={href}>
+          Read the case <span aria-hidden="true">→</span>
+          <span class="sr">: {item.name}</span>
+        </a>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .receipt {
+    --edge: 9px;
+    filter: drop-shadow(0 1px 0 var(--rule)) drop-shadow(0 10px 24px rgba(16, 19, 24, 0.08));
+  }
+
+  /* Torn top and bottom edges, drawn with a mask so the paper stays pure white. */
+  .paper {
+    background: var(--paper);
+    border-left: 1px solid var(--rule);
+    border-right: 1px solid var(--rule);
+    padding: 26px 24px 24px;
+    font-family: var(--mono);
+    -webkit-mask:
+      conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / calc(var(--edge) * 2) var(--edge) repeat-x,
+      conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / calc(var(--edge) * 2) var(--edge) repeat-x,
+      linear-gradient(#000 0 0) center / 100% calc(100% - var(--edge) * 2 + 2px) no-repeat;
+    mask:
+      conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / calc(var(--edge) * 2) var(--edge) repeat-x,
+      conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / calc(var(--edge) * 2) var(--edge) repeat-x,
+      linear-gradient(#000 0 0) center / 100% calc(100% - var(--edge) * 2 + 2px) no-repeat;
+  }
+
+  .r-head {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed var(--rule);
+  }
+
+  .r-title {
+    font-family: var(--display);
+    font-size: 30px;
+    margin: 16px 0 6px;
+  }
+
+  .r-outcome {
+    font-family: var(--sans);
+    color: var(--ink-2);
+    font-size: 16px;
+    line-height: 1.45;
+    margin-bottom: 16px;
+  }
+
+  .r-lines {
+    margin: 0;
+    font-size: 13.5px;
+  }
+
+  /* Dotted leader between label and value: dots on the row, label and value mask them. */
+  .r-line {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 5px 0;
+    background: radial-gradient(circle, #b9bec8 1px, transparent 1.4px) 0 calc(100% - 9px) / 6px 6px repeat-x;
+  }
+
+  .r-line dt,
+  .r-line dd {
+    background: var(--paper);
+  }
+
+  .r-line dt {
+    flex: 0 0 auto;
+    color: var(--muted);
+    white-space: nowrap;
+    padding-right: 6px;
+  }
+
+  .r-line dd {
+    margin: 0 0 0 auto;
+    padding-left: 6px;
+    text-align: right;
+    color: var(--ink);
+  }
+
+  .r-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 2px solid var(--ink);
+    font-size: 13px;
+  }
+
+  .r-total strong {
+    font: 700 34px/1 var(--display);
+    color: var(--cobalt);
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+
+  .r-foot {
+    margin: 10px 0 0;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .r-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    margin-top: 10px;
+    font: 600 15px/1 var(--sans);
+  }
+
+  .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+</style>

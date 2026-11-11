@@ -1,0 +1,59 @@
+---
+import Base from "../layouts/Base.astro";
+import LabGrid from "../components/LabGrid.astro";
+import { LAB, SITE } from "../data/site";
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Lab: working demos",
+    itemListElement: LAB.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      url: `${SITE.url}/lab/#${item.slug}`,
+    })),
+  },
+];
+---
+
+<Base
+  title="Lab: working demos with real code · Thuan Nguyen"
+  description="Personal demos that rebuild common client requests with sample data: restaurant admin, HR data sync, leave approvals, AI support inbox, price scraper, 3D configurator and an MCP server."
+  og="lab"
+  jsonLd={jsonLd}
+>
+  <section class="wrap lab-page">
+    <p class="eyebrow"><a href="/">Home</a> / The lab</p>
+    <h1>Working demos, real code.</h1>
+    <p class="lede">
+      Each demo rebuilds a request clients post on Upwork every week, with sample data instead of client data.
+      They are personal projects, built with Claude Code and reviewed by me, the same way I work on client code.
+    </p>
+    <LabGrid headingLevel="h2" />
+  </section>
+</Base>
+
+<style>
+  .lab-page {
+    padding-top: clamp(28px, 5vw, 56px);
+  }
+
+  .eyebrow a {
+    color: var(--muted);
+  }
+
+  h1 {
+    font-size: clamp(36px, 5.6vw, 64px);
+    letter-spacing: -0.03em;
+    margin: 20px 0 0;
+  }
+
+  .lede {
+    font-size: clamp(17px, 1.6vw, 20px);
+    color: var(--ink-2);
+    max-width: 60ch;
+    margin: 20px 0 48px;
+  }
+</style>

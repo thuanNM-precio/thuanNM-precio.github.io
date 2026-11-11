@@ -1,0 +1,247 @@
+---
+import "../styles/global.css";
+import { SITE } from "../data/site";
+
+interface Props {
+  title: string;
+  description: string;
+  og: string;
+  jsonLd?: Record<string, unknown>[];
+}
+
+const { title, description, og, jsonLd = [] } = Astro.props;
+const canonical = new URL(Astro.url.pathname, SITE.url).href;
+const ogImage = new URL(`/og/${og}.png`, SITE.url).href;
+const path = Astro.url.pathname;
+
+const person = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": `${SITE.url}/#person`,
+  name: SITE.name,
+  jobTitle: SITE.role,
+  url: `${SITE.url}/`,
+  image: `${SITE.url}/og/home.png`,
+  address: { "@type": "PostalAddress", addressLocality: "Ho Chi Minh City", addressCountry: "VN" },
+  knowsAbout: [
+    "ASP.NET Core",
+    "C#",
+    "Vue.js",
+    "React",
+    "TypeScript",
+    "SQL Server",
+    "Rust",
+    "Tauri",
+    "Cloudflare Workers",
+    "API integration",
+    "Model Context Protocol",
+    "Claude Code",
+  ],
+  sameAs: [SITE.upworkUrl],
+};
+
+const nav = [
+  { href: "/work/snapprompt/", label: "SnapPrompt" },
+  { href: "/work/keyward/", label: "KeyWard" },
+  { href: "/work/enterprise/", label: "Enterprise" },
+  { href: "/lab/", label: "Lab" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="author" content={SITE.name} />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script type="application/ld+json" set:html={JSON.stringify([person, ...jsonLd])} />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="masthead">
+      <div class="wrap masthead-row">
+        <a class="brand" href="/" aria-label={`${SITE.name}, home`}>
+          <span class="brand-mark" aria-hidden="true">TN</span>
+          <span class="brand-name">{SITE.name}</span>
+        </a>
+        <nav aria-label="Main">
+          <ul>
+            {
+              nav.map((item) => (
+                <li>
+                  <a href={item.href} aria-current={path === item.href ? "page" : undefined}>
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="footer">
+      <div class="wrap">
+        <div class="footer-cta">
+          <div>
+            <p class="eyebrow">Hire</p>
+            <h2>Send me the task. I reply with an approach, a time estimate and a fixed first step.</h2>
+          </div>
+          <a class="btn" href={SITE.upworkUrl} rel="noopener">Hire me on Upwork <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="footer-meta mono">
+          <span>{SITE.name} · {SITE.location} · {SITE.timezone}</span>
+          <span>Built with Astro. Written and shipped with Claude Code, reviewed by me.</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .masthead {
+    border-bottom: 1px solid var(--rule);
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(6px);
+    z-index: 5;
+  }
+
+  .masthead-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 60px;
+    flex-wrap: wrap;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink);
+    text-decoration: none;
+    font: 700 17px/1 var(--display);
+    min-height: 44px;
+  }
+
+  .brand-mark {
+    display: inline-grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    background: var(--ink);
+    color: #fff;
+    font: 500 12px/1 var(--mono);
+    border-radius: 4px;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+
+  nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 10px;
+    color: var(--ink-2);
+    text-decoration: none;
+    font-size: 15px;
+  }
+
+  nav a:hover,
+  nav a[aria-current="page"] {
+    color: var(--cobalt-ink);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 560px) {
+    .brand-name {
+      display: none;
+    }
+    nav a {
+      padding: 0 8px;
+      font-size: 14px;
+    }
+  }
+
+  .footer {
+    margin-top: clamp(64px, 10vw, 120px);
+    background: var(--ink);
+    color: #fff;
+    padding: 56px 0 28px;
+  }
+
+  .footer .eyebrow {
+    color: #aab2c0;
+  }
+
+  .footer h2 {
+    font-size: clamp(24px, 3.4vw, 38px);
+    max-width: 22ch;
+    margin-top: 10px;
+  }
+
+  .footer-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 28px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #2b313b;
+  }
+
+  .footer .btn {
+    background: #fff;
+    color: var(--ink);
+    border-color: #fff;
+  }
+
+  .footer .btn:hover {
+    background: var(--cobalt-wash);
+  }
+
+  .footer-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-top: 20px;
+    font-size: 12.5px;
+    color: #aab2c0;
+  }
+</style>

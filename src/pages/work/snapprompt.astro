@@ -1,0 +1,153 @@
+---
+import { Image } from "astro:assets";
+import Case from "../../layouts/Case.astro";
+import general from "../../assets/snapprompt/settings-general.png";
+import shortcuts from "../../assets/snapprompt/settings-shortcuts.png";
+import capture from "../../assets/snapprompt/settings-capture.png";
+import privacy from "../../assets/snapprompt/settings-privacy.png";
+import account from "../../assets/snapprompt/settings-account.png";
+
+const shots = [
+  { src: shortcuts, alt: "SnapPrompt shortcut settings: Quick Ask Ctrl+Shift+1, Full capture Ctrl+Shift+2, Open SnapPrompt Ctrl+Shift+3", caption: "System-wide shortcuts. Quick Ask and full capture are one key combination away." },
+  { src: capture, alt: "SnapPrompt capture settings: automatic text recognition with Windows OCR", caption: "Text recognition runs on the computer. Images are not sent anywhere until you press Send." },
+  { src: privacy, alt: "SnapPrompt privacy settings: image retention set by admin, history options", caption: "Privacy: retention is set by the organisation, history can be wiped in one click." },
+  { src: account, alt: "SnapPrompt account settings: Claude connection, organisation policy, allowed permission levels", caption: "Organisation policy: allowed models, permission levels and locked settings." },
+];
+---
+
+<Case
+  slug="snapprompt"
+  title="SnapPrompt: a desktop AI app built in ~16 hours · Thuan Nguyen"
+  description="Case study: SnapPrompt, a Windows tray app to capture any screen region and ask Claude about it. Tauri 2, Rust and React. Idea to v0.1.2 in about 16 hours of hands-on work, ~52k lines, 46 Rust tests, 9 parallel worktrees."
+>
+  <figure class="hero-shot">
+    <Image
+      src={general}
+      alt="SnapPrompt settings window, General tab: theme, colour palette, tray behaviour, start with Windows, language and updates"
+      widths={[480, 800, 1200]}
+      sizes="(min-width: 1160px) 1080px, 94vw"
+      format="webp"
+      quality={80}
+      loading="eager"
+      fetchpriority="high"
+    />
+    <figcaption class="mono">Real screenshot · SnapPrompt 0.1.3 settings on Windows 11</figcaption>
+  </figure>
+
+  <div class="prose">
+    <h2>The outcome</h2>
+    <p>
+      SnapPrompt is a Windows tray app. Press a shortcut, drag over any part of the screen, and ask Claude about
+      it: an error dialog, a chart, a form in another language. It went from idea to a signed, auto-updating
+      v0.1.2 release in about 16 hours of hands-on work.
+    </p>
+    <ul>
+      <li>Global shortcuts for Quick Ask and full capture, plus a tray menu that starts with Windows.</li>
+      <li>On-device text recognition, so you can select, copy or send only the text in an image.</li>
+      <li>Draw on and redact a capture before it leaves the computer.</li>
+      <li>Claude Code sessions with clear permission levels: ask first, edit files, or plan only.</li>
+      <li>An organisation policy file: allowed models, permission levels, image retention and locked settings.</li>
+      <li>Auto-update on launch and every 6 hours, and paid licenses verified by my own service, KeyWard.</li>
+      <li>English and Vietnamese interface.</li>
+    </ul>
+  </div>
+
+  <ul class="gallery">
+    {
+      shots.map((s) => (
+        <li>
+          <figure>
+            <Image src={s.src} alt={s.alt} widths={[400, 600, 800]} sizes="(min-width: 860px) 520px, 94vw" format="webp" quality={78} loading="lazy" />
+            <figcaption>{s.caption}</figcaption>
+          </figure>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="prose">
+    <h2>How it was built</h2>
+    <p>
+      Claude Code wrote most of the first draft. The speed came from how the work was organised, not from typing
+      faster.
+    </p>
+    <h3>Decisions on paper first</h3>
+    <p>
+      A written spec and a numbered decision log came before code: window families, the capture protocol, the
+      policy format, the update channel. Each later change pointed back to a decision instead of reopening it.
+    </p>
+    <h3>Nine lanes at once</h3>
+    <p>
+      Independent areas ran in 9 isolated Git worktrees at the same time: licensing, updates and release tooling,
+      text recognition, settings, performance, interface polish and QA. Each lane owned its own files, so the
+      branches merged without fights.
+    </p>
+    <h3>Tests and a human gate</h3>
+    <p>
+      The Rust core ships with 46 tests. I ran each build on a real Windows machine, read the diffs, and merged
+      only what I understood. The licensing backend behind it, KeyWard, was built the same way in 3 days.
+    </p>
+    <p class="note mono">
+      About the hours: ~16 h is measured hands-on working time from idea to v0.1.2, not the calendar time
+      between the first and last commit.
+    </p>
+
+    <h2>What this means for your project</h2>
+    <p>
+      The same process works on client code: a short written plan and a price first, independent parts built in
+      parallel, tests next to each feature, and a final review by me before anything lands in your repository.
+    </p>
+  </div>
+</Case>
+
+<style>
+  .hero-shot {
+    margin: clamp(28px, 5vw, 56px) 0 8px;
+  }
+
+  .hero-shot img,
+  .gallery img {
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    box-shadow: 0 18px 40px rgba(16, 19, 24, 0.1);
+    width: 100%;
+  }
+
+  figcaption {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .gallery {
+    list-style: none;
+    padding: 0;
+    margin: 40px 0 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+
+  @media (min-width: 860px) {
+    .gallery {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .gallery figure {
+    margin: 0;
+  }
+
+  .gallery figcaption {
+    font-family: var(--sans);
+    font-size: 14.5px;
+    color: var(--ink-2);
+  }
+
+  .note {
+    font-size: 13px;
+    color: var(--muted);
+    border-left: 3px solid var(--cobalt);
+    padding-left: 14px;
+  }
+</style>

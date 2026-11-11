@@ -1,0 +1,248 @@
+---
+import Base from "../layouts/Base.astro";
+import Receipt from "../components/Receipt.astro";
+import HeroArt from "../components/HeroArt.astro";
+import LabGrid from "../components/LabGrid.astro";
+import { CASES, METHOD, SITE } from "../data/site";
+
+const title = "Thuan Nguyen · Full-stack developer · .NET, Vue, React, AI tools";
+const description =
+  "Full-stack developer in Vietnam. Shipped a desktop AI app from idea to v0.1.2 in about 16 hours of work, and 102 enterprise PRs in 51 days. Claude Code is the method; I review every change.";
+---
+
+<Base title={title} description={description} og="home">
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow issue">Issue 01 · November 2026 · {SITE.location} · {SITE.timezone}</p>
+      <div class="hero-grid">
+        <div>
+          <h1>A desktop AI app, from idea to v0.1.2, in about 16 hours of work.</h1>
+          <p class="lede">
+            I'm Thuan Nguyen, a full-stack developer (.NET, Vue, React, SQL Server). I run Claude Code like a small
+            engineering team: planned, parallel and tested. I read and run every change before it ships.
+          </p>
+          <div class="hero-cta">
+            <a class="btn" href={SITE.upworkUrl} rel="noopener">Hire me on Upwork <span aria-hidden="true">→</span></a>
+            <a class="btn btn-ghost" href="/work/snapprompt/">See how it was built</a>
+          </div>
+        </div>
+        <HeroArt />
+      </div>
+
+      <dl class="stats">
+        <div>
+          <dt>SnapPrompt, idea to v0.1.2</dt>
+          <dd class="num">~16 h</dd>
+          <dd class="note mono">hands-on work time</dd>
+        </div>
+        <div>
+          <dt>PRs merged on an enterprise ticketing product</dt>
+          <dd class="num">102</dd>
+          <dd class="note mono">in 51 days</dd>
+        </div>
+        <div>
+          <dt>Enterprise codebases worked in</dt>
+          <dd class="num">37</dd>
+          <dd class="note mono">banks, retail, cities</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="work-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Selected work</p>
+        <div>
+          <h2 id="work-h">Three receipts</h2>
+          <p>Each card is the bill for one project: what it does, what it is made of, and what it took. Figures are measured, not rounded up.</p>
+        </div>
+      </div>
+      <div class="receipts">
+        {CASES.map((c) => <Receipt item={c} href={`/work/${c.slug}/`} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="method-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Method</p>
+        <div>
+          <h2 id="method-h">How I work with Claude Code</h2>
+          <p>The speed comes from process, not magic. Claude Code writes much of the first draft; I own the plan, the review and the result.</p>
+        </div>
+      </div>
+      <ol class="method">
+        {
+          METHOD.map((m) => (
+            <li>
+              <span class="mono step">{m.step}</span>
+              <h3>{m.title}</h3>
+              <p>{m.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="lab-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">The lab</p>
+        <div>
+          <h2 id="lab-h">Working demos, real code</h2>
+          <p>Personal projects that rebuild common client requests with sample data: dashboards, data sync, approvals, AI triage, scraping, 3D and MCP.</p>
+        </div>
+      </div>
+      <LabGrid />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding: clamp(28px, 6vw, 64px) 0 0;
+  }
+
+  .issue {
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: clamp(24px, 5vw, 48px);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    align-items: center;
+  }
+
+  @media (min-width: 860px) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: 48px;
+    }
+  }
+
+  h1 {
+    font-size: clamp(38px, 6.4vw, 76px);
+    letter-spacing: -0.035em;
+    line-height: 1;
+    max-width: 15ch;
+  }
+
+  .lede {
+    font-size: clamp(17px, 1.6vw, 20px);
+    color: var(--ink-2);
+    max-width: 52ch;
+    margin: 24px 0 28px;
+  }
+
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .stats {
+    margin: clamp(40px, 6vw, 72px) 0 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    border-top: 2px solid var(--ink);
+  }
+
+  @media (min-width: 720px) {
+    .stats {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .stats > div + div {
+      border-left: 1px solid var(--rule);
+      padding-left: 24px;
+    }
+  }
+
+  .stats > div {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stats dt {
+    order: 2;
+    font-size: 15px;
+    color: var(--ink-2);
+  }
+
+  .stats .num {
+    order: 1;
+    margin: 0;
+    font: 700 clamp(44px, 6vw, 64px) / 1 var(--display);
+    letter-spacing: -0.03em;
+    color: var(--cobalt);
+  }
+
+  .stats .note {
+    order: 3;
+    margin: 2px 0 0;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .receipts {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .receipts {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .method {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0 28px;
+  }
+
+  @media (min-width: 720px) {
+    .method {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .method {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .method li {
+    border-top: 1px solid var(--ink);
+    padding: 14px 0 24px;
+  }
+
+  .step {
+    font-size: 12px;
+    color: var(--cobalt-ink);
+  }
+
+  .method h3 {
+    font-size: 24px;
+    margin: 6px 0 8px;
+  }
+
+  .method p {
+    color: var(--ink-2);
+    font-size: 15.5px;
+    margin: 0;
+  }
+</style>

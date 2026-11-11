@@ -1,0 +1,141 @@
+---
+import Case from "../../layouts/Case.astro";
+
+const work = [
+  {
+    title: "HR system → Microsoft 365 profile sync",
+    text: "A daily .NET background service that copies employee data from Workday into Microsoft 365 profiles: a field-mapping screen for admins, change detection so only changed records are written, retries with backoff, and a run history.",
+    tags: ".NET · Microsoft Graph · Workday API",
+    demo: { href: "/lab/#sync-pilot", label: "Public rebuild: SyncPilot" },
+  },
+  {
+    title: "Notifications for a ticketing product",
+    text: "Email and in-app notifications in real time, built so that one event never produces duplicate alerts. Part of the 102 pull requests merged in 51 days, alongside a knowledge base, reply templates and message moderation.",
+    tags: ".NET 10 · SignalR · Microsoft Graph",
+  },
+  {
+    title: "AI ticket translation in 5 languages",
+    text: "Tickets are translated for agents with the customer's text kept apart from the instructions, so a ticket cannot steer the model.",
+    tags: "LLM · .NET · Vue",
+    demo: { href: "/lab/#inbox-triage", label: "Public rebuild: InboxTriage" },
+  },
+  {
+    title: "A product extension for a Nordic bank, built solo",
+    text: "Navigation tree and a continuous reader for a large handbook, from an empty repository to delivery: batched background loading, scroll sync between tree and reader, and localization.",
+    tags: "TypeScript · Vue · .NET",
+  },
+  {
+    title: "Connectors to enterprise systems",
+    text: "Integrations shipped with Workday, ServiceNow, SAP SuccessFactors, Adobe Acrobat Sign, Microsoft Graph and SharePoint, each with change detection and retries.",
+    tags: "REST · OAuth · background jobs",
+  },
+];
+---
+
+<Case
+  slug="enterprise"
+  title="Enterprise .NET and Vue work: 102 PRs in 51 days · Thuan Nguyen"
+  description="Enterprise work on a Microsoft 365 intranet product for Nordic customers: 102 pull requests merged in 51 days, 37 codebases, integrations with Workday, ServiceNow, SAP SuccessFactors and Adobe Acrobat Sign. No client code or screens shown."
+>
+  <div class="prose intro">
+    <h2>The outcome</h2>
+    <p>
+      Since 2024 I have built extensions and integrations for a Microsoft 365 intranet product used by enterprise
+      and public-sector customers in the Nordics: banks, retail groups and cities. I have worked in 37 of its
+      customer codebases. On one ticketing product, 102 of my pull requests were merged in 51 days.
+    </p>
+    <p>
+      Client names, code and screens are confidential, so this page describes the work by type. Where a pattern
+      is useful to show, I rebuilt it from scratch with sample data in the lab.
+    </p>
+  </div>
+
+  <ol class="work">
+    {
+      work.map((w, i) => (
+        <li>
+          <span class="mono idx">{String(i + 1).padStart(2, "0")}</span>
+          <div>
+            <h3>{w.title}</h3>
+            <p>{w.text}</p>
+            <p class="mono tags">{w.tags}</p>
+            {w.demo && <a href={w.demo.href}>{w.demo.label} <span aria-hidden="true">→</span></a>}
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+
+  <div class="prose">
+    <h2>How the work is done</h2>
+    <p>
+      Large tickets start as a short written plan that a reviewer can check before code exists. Claude Code drafts
+      the change in an isolated branch; I run it, read every line, add tests where behaviour matters, and open the
+      pull request under my name. That loop is what makes 102 merged pull requests in 51 days possible without
+      lowering the bar of a team review.
+    </p>
+
+    <h2>What this means for your project</h2>
+    <p>
+      If your company runs on .NET, Vue or React and talks to HR, ticketing or document systems, I have most
+      likely connected something similar before, and I know that the hard part is the retries, duplicates and
+      permissions, not the first API call.
+    </p>
+  </div>
+</Case>
+
+<style>
+  .intro {
+    margin-top: 24px;
+  }
+
+  .work {
+    list-style: none;
+    margin: 36px 0 8px;
+    padding: 0;
+    max-width: 860px;
+  }
+
+  .work li {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 12px;
+    padding: 22px 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .work li:first-child {
+    border-top: 2px solid var(--ink);
+  }
+
+  .idx {
+    font-size: 13px;
+    color: var(--cobalt-ink);
+    padding-top: 4px;
+  }
+
+  .work h3 {
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+
+  .work p {
+    color: var(--ink-2);
+    margin: 0 0 8px;
+    max-width: 66ch;
+  }
+
+  .work .tags {
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+
+  .work a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    font-size: 15px;
+  }
+</style>

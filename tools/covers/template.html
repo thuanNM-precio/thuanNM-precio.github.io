@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>cover</title>
+    <style>
+      @font-face { font-family: "Schibsted Grotesk"; font-weight: 700; src: url("../../node_modules/@fontsource/schibsted-grotesk/files/schibsted-grotesk-latin-700-normal.woff2") format("woff2"); }
+      @font-face { font-family: "IBM Plex Sans"; font-weight: 400; src: url("../../node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2") format("woff2"); }
+      @font-face { font-family: "IBM Plex Mono"; font-weight: 400; src: url("../../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); }
+      @font-face { font-family: "IBM Plex Mono"; font-weight: 500; src: url("../../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2") format("woff2"); }
+
+      :root {
+        --ink: #101318; --ink-2: #3a404b; --muted: #5c6370; --rule: #dadde3;
+        --cobalt: #1d4ed8; --edge: 10px;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; width: 100vw; height: 100vh; overflow: hidden; background: #fff; color: var(--ink); }
+      body { font: 400 20px/1.4 "IBM Plex Sans", sans-serif; }
+      .mono { font-family: "IBM Plex Mono", monospace; }
+
+      .frame {
+        position: absolute; inset: 0; padding: 44px 48px 40px;
+        display: grid; grid-template-rows: auto 1fr auto; gap: 26px;
+        border-top: 14px solid var(--ink);
+      }
+      .top, .bottom {
+        display: flex; justify-content: space-between; align-items: center;
+        font: 500 15px/1 "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+      }
+      .bottom { text-transform: none; letter-spacing: .02em; border-top: 2px solid var(--ink); padding-top: 16px; color: var(--ink-2); }
+      .bottom b { color: var(--cobalt); font-weight: 500; }
+
+      .main { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 40px; min-height: 0; }
+      .left { display: flex; flex-direction: column; gap: 22px; min-height: 0; }
+      h1 { font: 700 60px/1.0 "Schibsted Grotesk", sans-serif; letter-spacing: -.035em; margin: 0; }
+      .sub { margin: 0; color: var(--ink-2); font-size: 21px; max-width: 34ch; }
+
+      .shot { flex: 1; min-height: 0; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; box-shadow: 0 16px 36px rgba(16,19,24,.12); }
+      .shot img { width: 100%; height: 100%; object-fit: cover; object-position: top left; display: block; }
+      .code {
+        flex: 1; min-height: 0; background: var(--ink); color: #e6e9ef; border-radius: 8px; padding: 22px 24px;
+        font: 400 17px/1.7 "IBM Plex Mono", monospace; white-space: pre; overflow: hidden;
+      }
+      .code .c { color: #9aa3b2; }
+
+      .receipt { align-self: start; filter: drop-shadow(0 1px 0 var(--rule)) drop-shadow(0 12px 26px rgba(16,19,24,.1)); }
+      .paper {
+        background: #fff; border-left: 1px solid var(--rule); border-right: 1px solid var(--rule);
+        padding: 30px 26px 26px; font-family: "IBM Plex Mono", monospace;
+        -webkit-mask:
+          conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / calc(var(--edge)*2) var(--edge) repeat-x,
+          conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / calc(var(--edge)*2) var(--edge) repeat-x,
+          linear-gradient(#000 0 0) center / 100% calc(100% - var(--edge)*2 + 2px) no-repeat;
+      }
+      .r-head { font-size: 13px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; padding-bottom: 12px; border-bottom: 1px dashed var(--rule); }
+      .r-name { font: 700 30px/1.1 "Schibsted Grotesk", sans-serif; letter-spacing: -.02em; margin: 14px 0 10px; }
+      .line { display: flex; gap: 6px; font-size: 15px; padding: 6px 0; background: radial-gradient(circle, #b9bec8 1px, transparent 1.4px) 0 calc(100% - 10px) / 6px 6px repeat-x; }
+      .line span { background: #fff; }
+      .line span:first-child { padding-right: 6px; color: var(--muted); white-space: nowrap; }
+      .line span:last-child { margin-left: auto; padding-left: 6px; text-align: right; }
+      .total { margin-top: 14px; padding-top: 12px; border-top: 2px solid var(--ink); display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 14px; }
+      .total strong { font: 700 46px/1 "Schibsted Grotesk", sans-serif; color: var(--cobalt); letter-spacing: -.03em; white-space: nowrap; }
+
+      /* Open Graph size (1200x630): wider, shorter. The visual block is hidden; text and receipt carry it. */
+      @media (max-height: 700px) {
+        .frame { padding: 38px 52px 34px; gap: 20px; }
+        h1 { font-size: 64px; }
+        .shot, .code { display: none; }
+        .main { align-items: center; }
+        .left { justify-content: center; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      <div class="top"><span id="eyebrow"></span><span id="tag"></span></div>
+      <div class="main">
+        <div class="left">
+          <h1 id="title"></h1>
+          <p class="sub" id="sub"></p>
+          <div id="visual"></div>
+        </div>
+        <div class="receipt">
+          <div class="paper">
+            <div class="r-head" id="rhead"></div>
+            <div class="r-name" id="rname"></div>
+            <div id="lines"></div>
+            <div class="total"><span id="tlabel"></span><strong id="tvalue"></strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom"><span>Thuan Nguyen · Full-stack developer</span><b>thuannm-precio.github.io</b></div>
+    </div>
+    <script>
+      const d = window.COVER;
+      const set = (id, text) => (document.getElementById(id).textContent = text ?? "");
+      set("eyebrow", d.eyebrow);
+      set("tag", d.tag);
+      set("title", d.title);
+      set("sub", d.sub);
+      set("rhead", d.receiptHead);
+      set("rname", d.name);
+      set("tlabel", d.total[0]);
+      set("tvalue", d.total[1]);
+      if (d.total[1].length > 7) document.getElementById("tvalue").style.fontSize = "34px";
+      const lines = document.getElementById("lines");
+      for (const [k, v] of d.lines) {
+        const row = document.createElement("div");
+        row.className = "line";
+        const a = document.createElement("span");
+        a.textContent = k;
+        const b = document.createElement("span");
+        b.textContent = v;
+        row.append(a, b);
+        lines.append(row);
+      }
+      const visual = document.getElementById("visual");
+      visual.style.display = "contents";
+      if (d.image) {
+        const box = document.createElement("div");
+        box.className = "shot";
+        const img = document.createElement("img");
+        img.src = d.image;
+        img.alt = "";
+        box.append(img);
+        visual.append(box);
+      } else if (d.code) {
+        const box = document.createElement("div");
+        box.className = "code";
+        for (const ln of d.code) {
+          const span = document.createElement("div");
+          if (ln.startsWith("#")) span.className = "c";
+          span.textContent = ln;
+          box.append(span);
+        }
+        visual.append(box);
+      }
+    </script>
+  </body>
+</html>

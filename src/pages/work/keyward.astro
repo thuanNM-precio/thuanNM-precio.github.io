@@ -1,0 +1,75 @@
+---
+import Case from "../../layouts/Case.astro";
+---
+
+<Case
+  slug="keyward"
+  title="KeyWard: self-hosted software licensing in 3 days · Thuan Nguyen"
+  description="Case study: KeyWard, a self-hosted licensing service on Cloudflare Workers. License keys, seat limits, Ed25519-signed offline tokens, admin CLI and TypeScript and Rust SDKs. Built in 3 days, ~21k lines, ~200 tests."
+>
+  <div class="prose">
+    <h2>The outcome</h2>
+    <p>
+      SnapPrompt needed paid licenses, and I did not want to rent a licensing platform for one app. KeyWard sells,
+      issues, activates and verifies licenses for many products from one Cloudflare Worker. It took 3 days and
+      it licenses SnapPrompt today.
+    </p>
+    <ul>
+      <li>Typo-checked license keys and per-machine activation with seat limits.</li>
+      <li>Ed25519-signed license tokens. Apps and update servers verify them fully offline; private keys never leave the server.</li>
+      <li>Free licenses and offline authorization for machines that never go online.</li>
+      <li>Payments behind one interface, so a real gateway plugs in without touching the core.</li>
+      <li>Admin API and a <code>keyward</code> command-line tool, audit log, rate limits and a transactional outbox.</li>
+      <li>Client SDKs in TypeScript (browsers, Workers, Node) and Rust (Tauri and other desktop apps).</li>
+    </ul>
+
+    <h2>What using it looks like</h2>
+    <p>Setting up a product, a plan and its signing key from the admin CLI:</p>
+  </div>
+
+  <pre class="code" aria-label="KeyWard admin CLI example"><span class="c"># create a product and a plan, then rotate its signing key</span>
+keyward product create --id snapprompt --name SnapPrompt --prefix SNAP
+keyward plan create --id pro --name Pro --machines 2 --price 1900 \
+  --entitlements '&#123;"pro":true&#125;'
+keyward key rotate</pre>
+
+  <div class="prose">
+    <h2>How it is built</h2>
+    <p>
+      A modular monolith with hexagonal boundaries: the licensing core knows nothing about HTTP, the database or
+      payments, and the boundaries are enforced by lint rules rather than good intentions. Every write goes
+      through a unit of work that records events to an outbox, so a payment, its license and its audit entry
+      never disagree.
+    </p>
+    <p>
+      Stack: Cloudflare Workers, TypeScript, Hono, D1, Workers Rate Limiting and Wrangler, with a Rust client
+      crate for desktop apps. About 21,000 lines with about 200 automated tests, written with Claude Code from a
+      spec, a contracts file and a decision log, and reviewed by me.
+    </p>
+
+    <h2>What this means for your project</h2>
+    <p>
+      If you need an API with real money or real access behind it, I start from the contracts and the failure
+      cases, not the happy path: what happens when a payment arrives twice, a machine is offline for a month, or
+      a key has to be rotated.
+    </p>
+    <p class="note mono">The KeyWard source is private. I can walk through it on a call.</p>
+  </div>
+</Case>
+
+<style>
+  .prose:first-child {
+    margin-top: 24px;
+  }
+
+  .code {
+    max-width: 68ch;
+  }
+
+  .note {
+    font-size: 13px;
+    color: var(--muted);
+    border-left: 3px solid var(--cobalt);
+    padding-left: 14px;
+  }
+</style>
