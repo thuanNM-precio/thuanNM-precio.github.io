@@ -37,7 +37,7 @@ export const COVERS = [
       ["Licensing", "KeyWard (own)"],
     ],
     total: ["Hands-on work", "~16 h"],
-    image: asset("snapprompt/settings-general.png"),
+    image: asset("snapprompt/flow-2-ask.png"),
   },
   {
     slug: "keyward",

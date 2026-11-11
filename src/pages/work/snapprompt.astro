@@ -6,8 +6,11 @@ import shortcuts from "../../assets/snapprompt/settings-shortcuts.png";
 import capture from "../../assets/snapprompt/settings-capture.png";
 import privacy from "../../assets/snapprompt/settings-privacy.png";
 import account from "../../assets/snapprompt/settings-account.png";
+import flowSelect from "../../assets/snapprompt/flow-1-select.png";
+import flowAsk from "../../assets/snapprompt/flow-2-ask.png";
 
 const shots = [
+  { src: general, alt: "SnapPrompt settings, General tab: theme, colour palette, tray behaviour, start with Windows, language and updates", caption: "Settings: theme, tray behaviour, language and updates." },
   { src: shortcuts, alt: "SnapPrompt shortcut settings: Quick Ask Ctrl+Shift+1, Full capture Ctrl+Shift+2, Open SnapPrompt Ctrl+Shift+3", caption: "System-wide shortcuts. Quick Ask and full capture are one key combination away." },
   { src: capture, alt: "SnapPrompt capture settings: automatic text recognition with Windows OCR", caption: "Text recognition runs on the computer. Images are not sent anywhere until you press Send." },
   { src: privacy, alt: "SnapPrompt privacy settings: image retention set by admin, history options", caption: "Privacy: retention is set by the organisation, history can be wiped in one click." },
@@ -22,17 +25,35 @@ const shots = [
 >
   <figure class="hero-shot">
     <Image
-      src={general}
-      alt="SnapPrompt settings window, General tab: theme, colour palette, tray behaviour, start with Windows, language and updates"
-      widths={[480, 800, 1200]}
+      src={flowAsk}
+      alt="SnapPrompt Quick Ask over a selected screen region: text recognised by Windows OCR, a prompt box, and one-click actions What is this, Explain simply, Translate, Summarize"
+      widths={[480, 800, 1200, 1600]}
       sizes="(min-width: 1160px) 1080px, 94vw"
       format="webp"
       quality={80}
       loading="eager"
       fetchpriority="high"
     />
-    <figcaption class="mono">Real screenshot · SnapPrompt 0.1.3 settings on Windows 11</figcaption>
+    <figcaption class="mono">Real screenshot · SnapPrompt asking about this very page on Windows 11</figcaption>
   </figure>
+
+  <section class="flow" aria-labelledby="flow-h">
+    <h2 id="flow-h">How it works</h2>
+    <ol>
+      <li>
+        <figure>
+          <Image src={flowSelect} alt="SnapPrompt capture overlay: the screen is dimmed and a 1424 by 582 region is being selected" widths={[400, 600, 800]} sizes="(min-width: 860px) 520px, 94vw" format="webp" quality={78} loading="lazy" />
+          <figcaption><span class="mono step">01</span> Press Ctrl+Shift+1 and drag over any part of the screen. The size shows as you drag; Esc cancels.</figcaption>
+        </figure>
+      </li>
+      <li>
+        <figure>
+          <Image src={flowAsk} alt="SnapPrompt prompt box under the captured region with quick actions" widths={[400, 600, 800]} sizes="(min-width: 860px) 520px, 94vw" format="webp" quality={78} loading="lazy" />
+          <figcaption><span class="mono step">02</span> The text is recognised on the computer. Type a question or pick a quick action; nothing leaves the machine until you send.</figcaption>
+        </figure>
+      </li>
+    </ol>
+  </section>
 
   <div class="prose">
     <h2>The outcome</h2>
@@ -117,6 +138,51 @@ const shots = [
     margin-top: 10px;
     font-size: 13px;
     color: var(--muted);
+  }
+
+  .flow {
+    margin-top: 48px;
+  }
+
+  .flow h2 {
+    font-size: clamp(24px, 3vw, 32px);
+    margin-bottom: 20px;
+  }
+
+  .flow ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+
+  @media (min-width: 860px) {
+    .flow ol {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .flow figure {
+    margin: 0;
+  }
+
+  .flow img {
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    width: 100%;
+  }
+
+  .flow figcaption {
+    font-size: 15px;
+    color: var(--ink-2);
+  }
+
+  .step {
+    color: var(--cobalt-ink);
+    font-size: 13px;
+    margin-right: 6px;
   }
 
   .gallery {
